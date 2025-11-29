@@ -1,4 +1,4 @@
-import { chromium, Browser, Page } from 'playwright';
+import { chromium, Browser } from 'playwright';
 
 async function testBrowser() {
   let browser: Browser | null = null;
