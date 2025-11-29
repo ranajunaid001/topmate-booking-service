@@ -15,7 +15,7 @@ interface EnrichedExpert {
     serviceTitle: string;
     charge: number;
     currency: string;
-    type: string;
+    type: number;
   }>;
 }
 
