@@ -46,8 +46,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --production
+# Install ALL dependencies (including dev deps for building)
+RUN npm install
 
 # Install Playwright and its dependencies
 RUN npx playwright install chromium
@@ -58,6 +58,9 @@ COPY . .
 
 # Build TypeScript
 RUN npm run build
+
+# Remove dev dependencies after build
+RUN npm prune --production
 
 # Expose port
 EXPOSE ${PORT:-3000}
