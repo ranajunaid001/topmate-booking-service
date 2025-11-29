@@ -25,7 +25,7 @@ const BookingRequestSchema = z.object({
 });
 
 // Health check endpoint
-fastify.get('/', async (request, reply) => {
+fastify.get('/', async (_request, _reply) => {
   return { 
     status: 'ok', 
     message: 'Topmate Booking Service is running!',
@@ -38,7 +38,7 @@ fastify.get('/', async (request, reply) => {
 });
 
 // Simple test endpoint to verify Playwright works
-fastify.get('/test-browser', async (request, reply) => {
+fastify.get('/test-browser', async (_request, _reply) => {
   try {
     const { chromium } = await import('playwright');
     const browser = await chromium.launch({ 
@@ -124,7 +124,7 @@ fastify.post('/api/book-topmate-calls', async (request, reply) => {
 });
 
 // Error handler
-fastify.setErrorHandler((error, request, reply) => {
+fastify.setErrorHandler((error, _request, reply) => {
   fastify.log.error(error);
   
   reply.status(500).send({
