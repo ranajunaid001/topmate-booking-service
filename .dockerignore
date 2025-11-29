@@ -1,0 +1,20 @@
+git add .dockerignore
+```
+
+If for some reason it didn't get created, here's what you need to do:
+
+1. Create a file named `.dockerignore` in your project root (same directory as `Dockerfile`)
+2. Add this content:
+```
+node_modules
+npm-debug.log
+.env
+.env.local
+.git
+.gitignore
+README.md
+.vscode
+.idea
+*.png
+test-results
+playwright-report
