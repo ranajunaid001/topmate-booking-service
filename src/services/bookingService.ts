@@ -1,8 +1,6 @@
 import { TopmateBrowser } from '../automation/topmateBrowser';
 import { TopmateAPI } from '../api/topmateApi';
 import { Page } from 'playwright';
-import { parse, isWithinInterval, format } from 'date-fns';
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
 export interface AvailabilityWindow {
   days: string[]; // ["Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -225,7 +223,7 @@ export class BookingService {
       // Look for slot elements
       const slotElements = document.querySelectorAll('.slot-time, .time-slot');
       
-      slotElements.forEach((element, index) => {
+      slotElements.forEach((element: Element, index: number) => {
         const timeText = element.textContent?.trim();
         if (timeText) {
           slots.push({
@@ -242,8 +240,8 @@ export class BookingService {
 
   private findMatchingSlot(
     availableSlots: any[],
-    userAvailability: AvailabilityWindow[],
-    expertTimezone: string
+    _userAvailability: AvailabilityWindow[],
+    _expertTimezone: string
   ): any {
     // This is simplified - in reality you'd need to:
     // 1. Parse the slot datetime
