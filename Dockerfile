@@ -56,6 +56,12 @@ RUN npx playwright install-deps chromium
 # Copy source code
 COPY . .
 
+# Debug: List files to verify they're copied correctly
+RUN ls -la src/services/
+
+# Create dist directory
+RUN mkdir -p dist
+
 # Build TypeScript
 RUN npm run build
 
