@@ -5,17 +5,30 @@ dotenv.config();
 export interface TopmateUserProfile {
   id: number;
   username: string;
-  name: string;
-  headline: string;
-  bio: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  title: string;
+  description: string;
+  timezone: string;
+  profile_pic: string;
   services: Array<{
     id: number;
     title: string;
+    description: string;
     charge: number;
-    currency: string;
-    type: string;
-    duration?: number;
+    currency: {
+      code: string;
+      currency: string;
+      display_text: string;
+    };
+    type: number; // 1=video meeting, 4=package, 5=document
+    duration: number;
+    specific_date?: string | null;
+    bookings_limit?: number | null;
   }>;
+  avg_ratings?: number;
+  total_ratings?: number;
 }
 
 export interface TopmateServiceDetails {
@@ -23,9 +36,21 @@ export interface TopmateServiceDetails {
   title: string;
   description: string;
   charge: number;
-  currency: string;
+  original_charge?: number;
+  type: number;
   duration: number;
-  type: string;
+  currency: {
+    code: string;
+    currency: string;
+    display_text: string;
+  };
+  bookings_count?: number;
+  promised_response_time?: number;
+  bookings_limit?: number | null;
+  has_flexible_charge?: boolean;
+  package_services?: Array<any>;
+  total_charge?: number;
+  session_count?: number;
 }
 
 export class TopmateAPI {
@@ -98,11 +123,11 @@ export class TopmateAPI {
     serviceTitle: string;
     charge: number;
     currency: string;
-    type: string;
+    type: number;
     duration?: number;
   }> {
     // Check if user's profile matches target criteria
-    const profileText = `${userProfile.name} ${userProfile.headline} ${userProfile.bio}`.toLowerCase();
+    const profileText = `${userProfile.full_name} ${userProfile.title} ${userProfile.description}`.toLowerCase();
     const companyMatch = profileText.includes(targetCompany.toLowerCase());
     
     // Check for role match (handle variations like "Product Manager", "PM", etc.)
@@ -123,11 +148,10 @@ export class TopmateAPI {
         return false;
       }
 
-      // Check if it's a call/meeting type (not document-only)
-      const isCallType = service.type.toLowerCase().includes('meeting') ||
-                        service.type.toLowerCase().includes('call') ||
-                        service.type.toLowerCase().includes('video') ||
-                        service.type.toLowerCase().includes('chat');
+      // Check if it's a call/meeting type (type 1 = video meeting, type 4 = package might include calls)
+      // Type 5 is document-only, so we exclude that
+      const isCallType = service.type === 1 || 
+                        (service.type === 4 && service.duration > 0);
 
       return isCallType;
     });
@@ -138,7 +162,7 @@ export class TopmateAPI {
       serviceId: service.id,
       serviceTitle: service.title,
       charge: service.charge,
-      currency: service.currency,
+      currency: service.currency?.display_text || '$',
       type: service.type,
       duration: service.duration
     }));
