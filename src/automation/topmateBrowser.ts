@@ -113,7 +113,7 @@ export class TopmateBrowser {
       // Find all expert cards
       const cards = document.querySelectorAll('.HitoProfileCard_ES_Expert_Card__7CmLV');
       
-      cards.forEach(card => {
+      cards.forEach((card: Element) => {
         // Find the profile link
         const linkElement = card.closest('a') || card.querySelector('a');
         if (!linkElement) return;
@@ -181,7 +181,7 @@ export class TopmateBrowser {
       
       const serviceCards = document.querySelectorAll('.PublicServiceCard_ServiceCard__srMMU');
       
-      serviceCards.forEach(card => {
+      serviceCards.forEach((card: Element) => {
         // Get service ID
         const serviceId = card.id.replace('service-', '');
         
